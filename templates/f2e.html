@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+{% verbatim %}
+<div id='orders'>
+    <h1 class=''>{{ app_title }}</h1>
+    <div id='processing_orders'>
+        <h2 class='text-success'>進行中</h2>
+        <processing-orders 
+            v-for='order in processing_orders'
+            v-bind:order='order'
+            v-bind:key="order.pk"
+        >
+        </processing-orders>
+    </div>
+
+    <div id='finished_orders'>
+        <h2 class='text-secondary'>已完成</h2>
+        <finished-orders
+            v-for='order in finished_orders'
+            v-bind:order='order'
+            v-bind:key="order.pk"
+        >
+        <finished-orders>
+    </div>
+</div>
+
+<script type="text/x-template" id="order_template">
+    <div>
+        <img :src='order.logo'></img>
+        {{ order.type }}
+        預計出貨 {{ order.date }}
+        {{ order.name }}
+    </div>
+</script>
+
+<script>
+    Vue.component('processing-orders', {
+        props: ['order'],
+        template: '#order_template'
+    });
+
+    Vue.component('finished-orders', {
+        props: ['order'],
+        template: '#order_template'
+    });
+
+    var app = new Vue(
+        {
+            el: '#orders',
+            data () {
+                return {
+                    app_title: 'f2e - Orders',
+                    test_vue_data: 'test_vue_data',
+                    processing_orders: null,
+                    finished_orders: null,
+                }
+                
+            },
+            mounted () {
+                axios.get('/f2e/orders')
+                    .then(response=>{
+                        var processing = [];
+                        var finished = [];
+                        response.data.orders.forEach(order=>{
+                            console.log(order.status);
+                            if (order.status == 1 || order.status == 2) {
+                                processing.push(order);
+                            }
+                            else if (order.status == 3 || order.status == 4) {
+                                finished.push(order);
+                            }
+                        });
+                        this.processing_orders=processing;
+                        this.finished_orders=finished;
+                    })
+            }
+        },
+    );
+</script>
+{% endverbatim %}
+{% endblock %}
