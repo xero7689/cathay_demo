@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 {% verbatim %}
-<div id='orders'>
-    <h1 class=''>{{ app_title }}</h1>
+<div id='orders' class='px-3 py-3 pt-md-5 pb-md-4 mx-auto'>
+    <h1 class='display-4 text-center py-3'>{{ app_title }}</h1>
+    <p>Front-end implementation of f2e demo.</p>
+    <p>* python-django(2.1)</p>
+    <p>* vue.js + axios.js + boostrap.js</p>
+
     <div id='processing_orders'>
         <div class='row order_list_header border'>
             <div class='col pl-4 py-2'>
@@ -42,7 +46,7 @@
                     <span class='text-success'>{{ order.type }}</span>
                     預計出貨 {{ order.date }}
                 </p>
-                <p>{{ order.name }}<p>
+                <p>{{ order.name }}</p>
         </div>
     </div>
 </script>
@@ -56,11 +60,10 @@
                 <p>
                     <span class='text-secondary'>{{ order.type }}</span>
                 </p>
-                <p>{{ order.name }}<p>
+                <p>{{ order.name }}</p>
         </div>
     </div>
 </script>
-
 
 <script>
     Vue.component('processing-orders', {
@@ -78,8 +81,7 @@
             el: '#orders',
             data () {
                 return {
-                    app_title: 'f2e - Orders',
-                    test_vue_data: 'test_vue_data',
+                    app_title: 'F2E - Orders',
                     processing_orders: null,
                     finished_orders: null,
                 }
@@ -91,7 +93,6 @@
                         var processing = [];
                         var finished = [];
                         response.data.orders.forEach(order=>{
-                            console.log(order.status);
                             if (order.status == 1 || order.status == 2) {
                                 processing.push(order);
                             }
