@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.urls import reverse
 
@@ -8,7 +8,16 @@ from .models import SubmittedURL
 from .baseX import Base62
 
 
-def b2e(request):
+def b2e(request, short_path=None):
+    print(reverse('b2e_shortener'))
+    if short_path:
+        base62 = Base62()
+        url_id = base62.decode(short_path)
+        surl = SubmittedURL.objects.filter(pk=url_id)
+        if surl:
+            surl = surl[0]
+            print('Redirect to {}'.format(surl.url))
+            return redirect(surl.url)
     return render(request, 'b2e.html')
 
 
@@ -46,8 +55,8 @@ def shortener(request):
             surl = surl[0]
             surl.submit_num += 1
             surl.save()
-        short_url = base62.encode(surl.id)
-        response['short'] = 'b2e/' + short_url
+        short_path = base62.encode(surl.id)
+        response['short'] = short_path
     elif request.method == 'GET':
         print(request.GET)
     return JsonResponse(response)
