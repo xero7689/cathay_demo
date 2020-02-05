@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+{% verbatim %}
+
+<div class='row mb-3'>
+    <h1>b2e - URL Shortener</h2>
+</div>
+
+<div id='url_shortener' class='row mb-3'>
+    <div class="input-group mb-3">
+        <input type="url" v-model='input_url' class="form-control" placeholder="URL" aria-label="URL" aria-describedby="Submitted-URL">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" v-on:click='shorten_url'>Shorten</button>
+        </div>
+    </div>
+
+    <div class='mb-3'>
+        <p>Your short URL is {{ short_url }}</p>
+    </div>
+</div>
+
+<script>
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+    var app = new Vue({
+        el: '#url_shortener',
+        data: {
+            name: 'Vue.js',
+            input_url: null,
+            short_url: null
+        },
+        methods: {
+            shorten_url: function(event) {
+                console.log(this.input_url);
+                if (event) {
+                    axios.post('/b2e/shortener/', {'url': this.input_url})
+                        .then(response=>{
+                            console.log(response);
+                            this.short_url = response['data']['short'];
+                        })
+                        .catch(error=>{
+                            console.log(error);
+                        });
+                }
+            }
+        }
+    });
+</script>
+{% endverbatim %}
+{% endblock %}
