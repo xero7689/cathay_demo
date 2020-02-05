@@ -2,20 +2,22 @@
 {% block content %}
 {% verbatim %}
 
-<div class='row mb-3'>
-    <h1>b2e - URL Shortener</h2>
-</div>
+<div id='url_shortener' class='px-2 py-2 pt-md-5 pb-md-5 mx-auto'>
+    <h1 class='display-4 text-center py-3'>{{ app_title }}</h1>
 
-<div id='url_shortener' class='row mb-3'>
-    <div class="input-group mb-3">
-        <input type="url" v-model='input_url' class="form-control" placeholder="URL" aria-label="URL" aria-describedby="Submitted-URL">
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" v-on:click='shorten_url'>Shorten</button>
+    <div id='shortener_form' class='row'>
+        <div class="input-group col col-md-auto mb-2">
+            <input type="url" v-model='input_url' class="form-control mr-sm-2" placeholder="URL" aria-label="URL" aria-describedby="Submitted-URL">
+            <div class="input-group-append">
+                <button class="btn btn-success my-2 my-sm-0" type="button" v-on:click='shorten_url'>Shorten</button>
+            </div>
         </div>
     </div>
-
-    <div class='mb-3'>
-        <p>Your short URL is <a v-bind:href="short_url">{{ short_url }}</a></p>
+    <div class='row mb-3' v-if="short_url">
+        <div class='col'>
+            <h4 class='text-center text-secondary mb-1'>Your short URL is <a v-bind:href="short_path">{{ short_url }}</a></h4>
+            <h4 class='text-center text-secondary'>Click it to redirect to <a class='text-primary'>{{ input_url }}</a></h4>
+        </div>
     </div>
 </div>
 
@@ -26,8 +28,9 @@
     var app = new Vue({
         el: '#url_shortener',
         data: {
-            name: 'Vue.js',
+            app_title: 'B2E - URL Shortener',
             input_url: null,
+            short_path: null,
             short_url: null
         },
         methods: {
@@ -37,7 +40,9 @@
                     axios.post('/b2e/shortener/', {'url': this.input_url})
                         .then(response=>{
                             console.log(response);
-                            this.short_url = response['data']['short'];
+                            console.log(location);
+                            this.short_path = response['data']['short'];
+                            this.short_url = location.href + this.short_path;
                         })
                         .catch(error=>{
                             console.log(error);
