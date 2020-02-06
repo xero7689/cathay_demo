@@ -10,7 +10,11 @@ Cathay Interview Demo Project
 
 ## Usage
 ```shell
-python manage.py runserver 127.0.0.1:8000
+# Clone the project to local space
+$ pip install -r requirements.txt
+$ python manage.py makemigrations f2e b2e
+$ python manage.py migrate
+$ python manage.py runserver 127.0.0.1:8000
 ```
 
 F2E
