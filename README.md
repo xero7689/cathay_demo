@@ -1,12 +1,17 @@
 Cathay Interview Demo Project
 ---
 
-Requirements
----
+## Requirements
+- python 3.7+
 - django 2.1.5
 - vue.js 
 - axios.js
 - boostrap 4.4.1
+
+## Usage
+```shell
+python manage.py runserver 127.0.0.1:8000
+```
 
 F2E
 ---
