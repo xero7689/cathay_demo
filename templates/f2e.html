@@ -80,6 +80,9 @@
                     app_title: 'F2E - Orders',
                     processing_orders: null,
                     finished_orders: null,
+                    sort_by_order_date_desc: function (a, b) { 
+                        return new date(b.date) - new Date (a.date)
+                    },
                 }
                 
             },
@@ -96,8 +99,8 @@
                                 finished.push(order);
                             };
                         });
-                        this.processing_orders=processing;
-                        this.finished_orders=finished;
+                        this.processing_orders=processing.sort(this.sort_by_order_date);
+                        this.finished_orders=finished.sort(this.sort_by_order_date);
                     })
             }
         },
