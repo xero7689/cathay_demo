@@ -14,3 +14,13 @@ class OrdersTestCase(TestCase):
         self.assertEqual(orders.count(), 1)
         self.assertEqual(orders[0].name, 'Apple Airpods 2')
 
+    def test_custom_field(self):
+        order = Order()
+        order.name = 'Apple Airpods 2'
+        order.logo = 'https://static.oopocket.com/store/iconTreemall@3x.png'
+        order.status = 4
+        order.date = '2019-03-02'
+        order.save()
+
+        order = Order.objects.filter(status=4)
+        print(order[0].deal_type)
